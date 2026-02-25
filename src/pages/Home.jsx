@@ -1,15 +1,21 @@
-import Paragraph from "../components/ParagraphContent";
 
 import TextFileRenderer from "../components/TextFileRenderer";
 
+/*
+    Required content:
+    - Title
+    - Email and other web links
+    - Short bio (about me)
+    - Project headings (Two Sections Independent / Team Projects, and University Group Projects)
+    - Project links with image thumbnails
+*/
+
 function Home() {
     
-    const HomePageContent = "it didn't work";//TextFileRenderer(process.env.PUBLIC_URL + "/text/AboutMe.txt");
-    //<Paragraph text={HomePageContent} />
+    
     return (
         <div>
             <h1>Henry Kavadias-Barnes</h1>
-            <TextFileRenderer fileName="text/AboutMe" />
         </div>
     );
 }
