@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-
+import XMLFileRenderer from "../../components/XMLFileRenderer";
 
 /*
     Required content:
@@ -14,7 +13,8 @@ function EggEscape() {
     
     return (
         <div>
-            <h1>Egg Escape</h1>
+            <XMLFileRenderer fileName="content/EggEscape/EE_Title" />
+            <XMLFileRenderer fileName="content/EggEscape/EE_Content" />
         </div>
     );
 }

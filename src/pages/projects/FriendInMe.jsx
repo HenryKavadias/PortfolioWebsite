@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import XMLFileRenderer from "../../components/XMLFileRenderer";
 
 /*
     Required content:
@@ -13,7 +13,8 @@ function FriendInMe() {
     
     return (
         <div>
-            <h1>Friend in Me</h1>
+            <XMLFileRenderer fileName="content/FriendInMe/FIM_Title" />
+            <XMLFileRenderer fileName="content/FriendInMe/FIM_Content" />
         </div>
     );
 }

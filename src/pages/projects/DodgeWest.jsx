@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-
+import XMLFileRenderer from "../../components/XMLFileRenderer";
 
 /*
     Required content:
@@ -15,7 +14,10 @@ function DodgeWest() {
     
     return (
         <div>
-            <h1>Dodge West</h1>
+            <XMLFileRenderer fileName="content/DodgeWest/DW_Title" />
+            <XMLFileRenderer fileName="content/DodgeWest/DW_Content" />
+            <XMLFileRenderer fileName="content/DodgeWest/DW_MC_Title" />
+            <XMLFileRenderer fileName="content/DodgeWest/DW_MajorContributions" />
         </div>
     );
 }

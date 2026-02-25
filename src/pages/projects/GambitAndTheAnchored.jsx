@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-
+import XMLFileRenderer from "../../components/XMLFileRenderer";
 
 /*
     Required content:
@@ -11,11 +10,11 @@ import { useState, useEffect } from "react";
 */
 
 function GambitAndTheAnchored() {
-
-
+    
     return (
         <div>
-            <h1>Gambit and the Anchored</h1>
+            <XMLFileRenderer fileName="content/GambitAnchored/GatA_Title" />
+            <XMLFileRenderer fileName="content/GambitAnchored/GtaA_Content" />
         </div>
     );
 }

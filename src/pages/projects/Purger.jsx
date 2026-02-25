@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import XMLFileRenderer from "../../components/XMLFileRenderer";
 
 /*
     Required content:
@@ -12,7 +12,8 @@ function Purger() {
     
     return (
         <div>
-            <h1>Purger</h1>
+            <XMLFileRenderer fileName="content/Purger/P_Title" />
+            <XMLFileRenderer fileName="content/Purger/P_Content" />
         </div>
     );
 }

@@ -1,5 +1,5 @@
 
-import TextFileRenderer from "../components/TextFileRenderer";
+import XMLFileRenderer from "../components/XMLFileRenderer";
 
 /*
     Required content:
@@ -12,7 +12,7 @@ import TextFileRenderer from "../components/TextFileRenderer";
 
 function Home() {
     
-    const content = <TextFileRenderer fileName="text/Home/AboutMe" />;
+    const content = <XMLFileRenderer fileName="content/Home/AboutMe" />;
     
     return (
         <div>
