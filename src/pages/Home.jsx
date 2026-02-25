@@ -12,11 +12,12 @@ import TextFileRenderer from "../components/TextFileRenderer";
 
 function Home() {
     
+    const content = <TextFileRenderer fileName="text/Home/AboutMe" />;
     
     return (
         <div>
             <h1>Henry Kavadias-Barnes</h1>
-            <TextFileRenderer fileName="text/Home/AboutMe" />
+            {content}
         </div>
     );
 }

@@ -29,25 +29,3 @@ function TextFileRenderer({ fileName }) {
 }
 
 export default TextFileRenderer;
-
-
-// Alternative implementation using a custom hook
-/*
-export const TextFileRenderer = (filePath) => {
-    const [textData, setTextData] = useState("");
-
-    useEffect(() => {
-        fetch(filePath)
-            .then((response) => response.text())
-            .then((data) => setTextData(data))
-            .catch((error) => console.error("Error fetching text file:", error));
-    }, []);
-
-    return (
-        <div>
-            <pre>{textData}</pre>
-        </div>
-    );
-
-};
-*/
