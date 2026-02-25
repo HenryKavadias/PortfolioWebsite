@@ -1,0 +1,13 @@
+A third person, 3D movement, Fast-paced, Possession, Gunship action game. Each gunship has access to a different selection of weapons that they can fire from a varying number of turrets. 
+
+Each gunship in the game can be controlled by either an AI or the player. The player can both turn enemy gunships to their side and possess other gunships after the one they are currently controlling dies. The number of times the player can possess/turn a gunship is limited.
+
+Development on  this project is currently paused. I was mostly using it as a learning experience to:
+
+Apply my skills in programming and games design after graduating.
+
+Build on an interesting game prototype left over from a game jam.
+
+Experiment with scalable and modular design practices.
+
+Prototype Demo: https://fiddury.itch.io/purger 

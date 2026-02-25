@@ -1,0 +1,21 @@
+Player Character — Built all core player systems and components
+
+UI Infrastructure — Created all UI scenes and implemented the underlying logic and navigation
+
+Game Manager — Developed the system controlling the events during the match (including the raining‑items scenario)
+
+Item Infrastructure — Implemented the logic for all interactable and throwable items.
+
+Damage System — Built the damage framework for players and items
+
+Explosions — Created the logic for all explosive items
+
+Destructible Buildings — Designed and implemented fully destructible structures with piece‑by‑piece breakability
+
+Audio System — Implemented and refined the system for managing all sound effects and music
+
+Local Multiplayer — Developed the entire for local multiplayer system
+
+The Tutorial Level — Designed and built the tutorial level, including the slideshow teaching sequence.
+
+The Train Station Level — Designed the Train Station level.
