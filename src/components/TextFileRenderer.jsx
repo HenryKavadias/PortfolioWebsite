@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 
 const get_text_file = async (filepath) => {
-  // prefix public dir files with `process.env.PUBLIC_URL`
-  // see https://create-react-app.dev/docs/using-the-public-folder/
-  const res = await fetch(`${process.env.PUBLIC_URL}/${filepath}`);
+  // In Vite, files in public/ are served from the root
+  // No need for process.env.PUBLIC_URL
+  const res = await fetch(`/${filepath}`);
 
   // check for errors
   if (!res.ok) {
@@ -23,13 +23,15 @@ function TextFileRenderer({ fileName }) {
   
   return (
     <>
-      <p>{text}</p>
+      <p dangerouslySetInnerHTML={{ __html: text }} />
     </>
   );
 }
 
 export default TextFileRenderer;
 
+
+// Alternative implementation using a custom hook
 /*
 export const TextFileRenderer = (filePath) => {
     const [textData, setTextData] = useState("");

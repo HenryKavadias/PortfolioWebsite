@@ -1,4 +1,4 @@
-I am Henry Kavadias-Barnes, Software Engineer, Game Design, and Gameplay Programmer. I earned a double bachelor's degree from Swinburne University covering Computer Science and Games and Interactivity. 
+I am Henry Kavadias-Barnes, <b>Software Engineer</b>, Game Design, and Gameplay Programmer. I earned a double bachelor's degree from Swinburne University covering Computer Science and Games and Interactivity. 
 
 I'm passionate about games and applications that engage people, and enjoy tackling complex technical and design challenges.
 

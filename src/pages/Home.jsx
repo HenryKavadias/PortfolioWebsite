@@ -16,6 +16,7 @@ function Home() {
     return (
         <div>
             <h1>Henry Kavadias-Barnes</h1>
+            <TextFileRenderer fileName="text/Home/AboutMe" />
         </div>
     );
 }
