@@ -1,45 +1,15 @@
 <content>
-  <paragraph>
-    <bold>Player Character</bold> — Built all core player systems and components
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>UI Infrastructure</bold> — Created all UI scenes and implemented the underlying logic and navigation
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>Game Manager</bold> — Developed the system controlling the events during the match (including the raining‑items scenario)
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>Item Infrastructure</bold> — Implemented the logic for all interactable and throwable items.
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>Damage System</bold> — Built the damage framework for players and items
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>Explosions</bold> — Created the logic for all explosive items
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>Destructible Buildings</bold> — Designed and implemented fully destructible structures with piece‑by‑piece breakability
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>Audio System</bold> — Implemented and refined the system for managing all sound effects and music
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>Local Multiplayer</bold> — Developed the entire for local multiplayer system
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>The Tutorial Level</bold> — Designed and built the tutorial level, including the slideshow teaching sequence.
-  </paragraph>
-  <break />
-  <paragraph>
-    <bold>The Train Station Level</bold> — Designed the Train Station level.
-  </paragraph>
+  <list>
+    <item><bold>Player Character</bold> — Built all core player systems and components</item>
+    <item><bold>UI Infrastructure</bold> — Created all UI scenes and implemented the underlying logic and navigation</item>
+    <item><bold>Game Manager</bold> — Developed the system controlling the events during the match (including the raining items scenario)</item>
+    <item><bold>Item Infrastructure</bold> — Implemented the logic for all interactable and throwable items.</item>
+    <item><bold>Damage System</bold> — Built the damage framework for players and items</item>
+    <item><bold>Explosions</bold> — Created the logic for all explosive items</item>
+    <item><bold>Destructible Buildings</bold> — Designed and implemented fully destructible structures with piece by piece breakability</item>
+    <item><bold>Audio System</bold> — Implemented and refined the system for managing all sound effects and music</item>
+    <item><bold>Local Multiplayer</bold> — Developed the entire for local multiplayer system</item>
+    <item><bold>The Tutorial Level</bold> — Designed and built the tutorial level, including the slideshow teaching sequence.</item>
+    <item><bold>The Train Station Level</bold> — Designed the Train Station level.</item>
+  </list>
 </content>

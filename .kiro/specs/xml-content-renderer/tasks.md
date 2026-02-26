@@ -186,16 +186,12 @@ This plan implements the XML Content Renderer feature by creating a new XMLFileR
 - [x] 8. Checkpoint - Verify all pages render correctly with XMLFileRenderer
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 9. Clean up old implementation
-  - [ ] 9.1 Remove TextFileRenderer component
-    - Delete src/components/TextFileRenderer.jsx file
-    - Delete src/css/TextFileRenderer.css file if it exists
-  
-  - [ ] 9.2 Remove old .txt content files
-    - Delete all .txt files from public/text/ directory
+- [x] 9. Clean up old implementation
+  - [x] 9.1 Remove old .txt content files
+    - Delete all .txt files from public/content/ directory
     - Keep only .xml files
 
-- [ ] 10. Final checkpoint - Verify complete migration
+- [x] 10. Final checkpoint - Verify complete migration
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes

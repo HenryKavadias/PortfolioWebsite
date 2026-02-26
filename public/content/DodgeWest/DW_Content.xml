@@ -1,25 +1,20 @@
 <content>
   <paragraph>
-    A chaotic first‑person party shooter where up to four players, out of ammo in a tense standoff, must scramble to grab and throw whatever objects they can find around the level until only one remains standing.
-  </paragraph>
-  <break />
-  <paragraph>
+    A chaotic first person party shooter where up to four players, out of ammo in a tense standoff, must scramble to grab and throw whatever objects they can find around the level until only one remains standing.
+   <break />
+   <break />
     I was a designer, lead programmer, and team manager in a team 4 developers, with the goal of showcasing the game at Melbourne PAX 2023. I built the majority of the backend systems and assisted with implementing the frontend content (see Major Contributions below). I also gathered player feedback during development, and designed the Train Station level.
-  </paragraph>
-  <break />
-  <paragraph>
-    Download: here
-  </paragraph>
-  <break />
-  <paragraph>
-    GitHub: <link href="https://github.com/HenryKavadias/Dodge-West">https://github.com/HenryKavadias/Dodge-West</link>
-  </paragraph>
-  <break />
-  <paragraph>
-    GitHub Wiki: <link href="https://github.com/HenryKavadias/Dodge-West/wiki">https://github.com/HenryKavadias/Dodge-West/wiki</link>
-  </paragraph>
-  <break />
-  <paragraph>
-    Press Kit: <link href="https://github.com/HenryKavadias/Dodge-West/wiki/Press-Kit">https://github.com/HenryKavadias/Dodge-West/wiki/Press-Kit</link>
+   <break />
+   <break />
+    <link href="https://thefid.itch.io/dodge-west">Download Demo</link>
+   <break />
+   <break />
+    <link href="https://github.com/HenryKavadias/Dodge-West">GitHub</link>
+   <break />
+   <break />
+    <link href="https://github.com/HenryKavadias/Dodge-West/wiki">GitHub Wiki</link>
+   <break />
+   <break />
+    <link href="https://github.com/HenryKavadias/Dodge-West/wiki/Press-Kit">Press Kit</link>
   </paragraph>
 </content>

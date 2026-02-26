@@ -1,5 +1,0 @@
-A side-scrolling physics platformer where you play as a magic dragon egg trying to hatch itself in a volcano. Movement is almost entirely momentum‑based. The player bounces, redirects, and builds momentum using the environment. Special coloured platforms allow the egg to shift its gravity direction (e.g., blue sets gravity toward the platform, purple reverses it)
-
-I was the lead programmer in a small team that worked remotely on this Unity game project while we were in a COVID lockdown. We started with an existing demo, which I refined by documenting, and improving the original codebase. I then implemented new movement features so the player has greater control over the egg's movement. I also contributed to some early designs for levels.
-
-Download here

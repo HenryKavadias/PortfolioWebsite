@@ -1799,3 +1799,116 @@ describe('Property 8: Link Href Preservation', () => {
     );
   });
 });
+
+/**
+ * Test direct header tags (h1-h6)
+ */
+describe('Direct Header Tag Support', () => {
+  it('should support h1 tag', () => {
+    const xml = '<content><h1>Heading 1</h1></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h1');
+    expect(result[0].props.children).toBe('Heading 1');
+  });
+
+  it('should support h2 tag', () => {
+    const xml = '<content><h2>Heading 2</h2></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h2');
+    expect(result[0].props.children).toBe('Heading 2');
+  });
+
+  it('should support h3 tag', () => {
+    const xml = '<content><h3>Heading 3</h3></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h3');
+    expect(result[0].props.children).toBe('Heading 3');
+  });
+
+  it('should support h4 tag', () => {
+    const xml = '<content><h4>Heading 4</h4></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h4');
+    expect(result[0].props.children).toBe('Heading 4');
+  });
+
+  it('should support h5 tag', () => {
+    const xml = '<content><h5>Heading 5</h5></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h5');
+    expect(result[0].props.children).toBe('Heading 5');
+  });
+
+  it('should support h6 tag', () => {
+    const xml = '<content><h6>Heading 6</h6></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h6');
+    expect(result[0].props.children).toBe('Heading 6');
+  });
+
+  it('should support all header levels in same document', () => {
+    const xml = `<content>
+      <h1>Level 1</h1>
+      <h2>Level 2</h2>
+      <h3>Level 3</h3>
+      <h4>Level 4</h4>
+      <h5>Level 5</h5>
+      <h6>Level 6</h6>
+    </content>`;
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(6);
+    expect(result[0].type).toBe('h1');
+    expect(result[1].type).toBe('h2');
+    expect(result[2].type).toBe('h3');
+    expect(result[3].type).toBe('h4');
+    expect(result[4].type).toBe('h5');
+    expect(result[5].type).toBe('h6');
+  });
+
+  it('should support header tags with nested content', () => {
+    const xml = '<content><h2>Title with <bold>bold</bold> text</h2></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h2');
+    expect(result[0].props.children).toHaveLength(3);
+    expect(result[0].props.children[0]).toBe('Title with ');
+    expect(result[0].props.children[1].type).toBe('strong');
+    expect(result[0].props.children[2]).toBe(' text');
+  });
+
+  it('should support header tags with attributes', () => {
+    const xml = '<content><h2 class="title" id="main-title">Heading</h2></content>';
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe('h2');
+    expect(result[0].props.class).toBe('title');
+    expect(result[0].props.id).toBe('main-title');
+  });
+
+  it('should work alongside heading tag with level attribute', () => {
+    const xml = `<content>
+      <heading level="1">Using heading tag</heading>
+      <h1>Using h1 tag</h1>
+    </content>`;
+    const result = parseXMLToReact(xml);
+    
+    expect(result).toHaveLength(2);
+    expect(result[0].type).toBe('h1');
+    expect(result[1].type).toBe('h1');
+  });
+});

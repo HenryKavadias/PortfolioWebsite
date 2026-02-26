@@ -131,6 +131,24 @@ function mapTagToComponent(tagName, attributes, children, key) {
       const headingTag = `h${level}`;
       return React.createElement(headingTag, props, ...children);
 
+    case 'h1':
+      return React.createElement('h1', props, ...children);
+
+    case 'h2':
+      return React.createElement('h2', props, ...children);
+
+    case 'h3':
+      return React.createElement('h3', props, ...children);
+
+    case 'h4':
+      return React.createElement('h4', props, ...children);
+
+    case 'h5':
+      return React.createElement('h5', props, ...children);
+
+    case 'h6':
+      return React.createElement('h6', props, ...children);
+
     case 'list':
       const listTag = attributes.type === 'ordered' ? 'ol' : 'ul';
       return React.createElement(listTag, props, ...children);

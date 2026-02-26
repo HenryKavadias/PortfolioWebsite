@@ -13,10 +13,11 @@ import XMLFileRenderer from "../components/XMLFileRenderer";
 function Home() {
     
     const content = <XMLFileRenderer fileName="content/Home/AboutMe" />;
-    
+    const heading = <XMLFileRenderer fileName="content/Home/HP-Title" />;
+
     return (
         <div>
-            <h1>Henry Kavadias-Barnes</h1>
+            {heading}
             {content}
         </div>
     );
