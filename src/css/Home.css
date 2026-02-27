@@ -1,0 +1,17 @@
+.weblink-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.email-and-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.email-and-links p {
+    font-size: 1.5rem;
+}

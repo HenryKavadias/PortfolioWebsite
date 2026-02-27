@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Purger from "./pages/projects/Purger";
 import DodgeWest from "./pages/projects/DodgeWest";
@@ -13,6 +13,7 @@ function App() {
 
   return (
     <div>
+      <Link to="/" className="author-name">Henry Kavadias-Barnes</Link>
       <NavBar />
       <main className='main-content'>
         <Routes>

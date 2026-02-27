@@ -18,6 +18,27 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.author-name {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+}
+
+.author-name:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
