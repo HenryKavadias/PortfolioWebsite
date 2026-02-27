@@ -12,13 +12,14 @@ import XMLFileRenderer from "../components/XMLFileRenderer";
 
 function Home() {
     
-    const content = <XMLFileRenderer fileName="content/Home/AboutMe" />;
-    const heading = <XMLFileRenderer fileName="content/Home/HP-Title" />;
-
+    
+    
     return (
         <div>
-            {heading}
-            {content}
+            <h1>Software Engineer &amp; Gameplay Programmer</h1>
+            <XMLFileRenderer fileName="content/Home/AboutMe" />
+            <h2>Independent / Team Projects</h2>
+            
         </div>
     );
 }
