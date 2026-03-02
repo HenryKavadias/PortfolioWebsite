@@ -1,4 +1,5 @@
 import XMLFileRenderer from "../../components/XMLFileRenderer";
+import Screenshot from "../../components/Screenshot";
 
 /*
     Required content:
@@ -8,26 +9,16 @@ import XMLFileRenderer from "../../components/XMLFileRenderer";
     - Screenshots
 */
 
-function Screenshot({ src, alt, imageSize = 600 }) {
-    return (
-        <img 
-        src={src} 
-        alt={alt} 
-        className="web-link-image"
-        style={{ width: `${imageSize}px`, height: `${imageSize}px` }}/>
-    );
-}
-
 function Purger() {
     
     return (
         <div>
             <XMLFileRenderer fileName="content/Purger/P_Title" />
             <XMLFileRenderer fileName="content/Purger/P_Content" />
-            <Screenshot src="/images/Purger/PurgerScreenShot1.png" alt="Purger Screenshot 1" />
-            <Screenshot src="/images/Purger/PurgerScreenShot2.png" alt="Purger Screenshot 2" />
-            <Screenshot src="/images/Purger/PurgerScreenShot3.png" alt="Purger Screenshot 3" />
-            <Screenshot src="/images/Purger/PurgerScreenShot4.png" alt="Purger Screenshot 4" />
+            <Screenshot src="/images/Purger/PurgerScreenshot1.png" alt="Purger Screenshot 1" size={400} />
+            <Screenshot src="/images/Purger/PurgerScreenshot2.png" alt="Purger Screenshot 2" size={400} />
+            <Screenshot src="/images/Purger/PurgerScreenshot3.png" alt="Purger Screenshot 3" size={400} />
+            <Screenshot src="/images/Purger/PurgerScreenshot4.png" alt="Purger Screenshot 4" size={400} />
         </div>
     );
 
