@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { parseXMLToReact } from '../utils/xmlParser';
+import { LoadingTrackerContext } from '../contexts/LoadingTrackerContext';
 
 /**
  * Fetches an XML file from the public directory
@@ -22,13 +23,24 @@ async function fetchXMLFile(filepath) {
   }
 }
 
-function XMLFileRenderer({ fileName, className }) {
+function XMLFileRenderer({ fileName, className, trackLoading = true }) {
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Access LoadingTrackerContext (may be undefined if not within PageLoader)
+  const loadingTracker = useContext(LoadingTrackerContext);
+  
+  // Generate stable resource ID using useRef
+  const resourceId = useRef(`xml-${fileName}-${Math.random()}`).current;
 
   useEffect(() => {
     let isMounted = true;
+    
+    // Register resource with LoadingTracker if context is available and tracking is enabled
+    if (trackLoading && loadingTracker?.registerResource) {
+      loadingTracker.registerResource(resourceId);
+    }
 
     async function loadContent() {
       try {
@@ -41,12 +53,22 @@ function XMLFileRenderer({ fileName, className }) {
         if (isMounted) {
           setContent(reactElements);
           setLoading(false);
+          
+          // Mark resource as complete after successful load
+          if (trackLoading && loadingTracker?.markResourceComplete) {
+            loadingTracker.markResourceComplete(resourceId);
+          }
         }
       } catch (err) {
         if (isMounted) {
           setError(err);
           setLoading(false);
           console.error('Error loading XML content:', err);
+          
+          // Mark resource as complete even on error to prevent blocking
+          if (trackLoading && loadingTracker?.markResourceComplete) {
+            loadingTracker.markResourceComplete(resourceId);
+          }
         }
       }
     }
@@ -55,8 +77,13 @@ function XMLFileRenderer({ fileName, className }) {
 
     return () => {
       isMounted = false;
+      
+      // Mark resource as complete on unmount for cleanup
+      if (trackLoading && loadingTracker?.markResourceComplete) {
+        loadingTracker.markResourceComplete(resourceId);
+      }
     };
-  }, [fileName]);
+  }, [fileName, trackLoading, loadingTracker, resourceId]);
 
   // Render logic based on state
   if (loading) {

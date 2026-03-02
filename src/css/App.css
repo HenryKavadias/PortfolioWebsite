@@ -5,6 +5,17 @@
   text-align: center;
 }
 
+/* Fix for list item alignment - override inherited center alignment */
+#root ul,
+#root ol {
+  text-align: left;
+  display: inline-block;
+}
+
+#root li {
+  text-align: left;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -1,6 +1,7 @@
 
 import XMLFileRenderer from "../components/XMLFileRenderer";
 import WebLink from "../components/WebLink";
+import PageLoader from "../components/PageLoader";
 import "../css/Home.css";
 
 /*
@@ -64,9 +65,9 @@ function Home() {
         </div>;
     
     return (
-        <>
+        <PageLoader>
             {homeContent}
-        </>
+        </PageLoader>
     );
 }
 

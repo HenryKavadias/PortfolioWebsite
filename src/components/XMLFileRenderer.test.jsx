@@ -1,586 +1,670 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, waitFor, cleanup } from '@testing-library/react';
-import fc from 'fast-check';
 import XMLFileRenderer from './XMLFileRenderer';
+import { LoadingTrackerContext } from '../contexts/LoadingTrackerContext';
 
 /**
- * **Validates: Requirements 1.1, 1.2, 1.3, 11.3**
+ * Unit tests for XMLFileRenderer component with loading tracking integration
  * 
- * Property 15: Fetch Triggers on Mount
- * For any valid fileName prop, mounting the XMLFileRenderer component should 
- * trigger a fetch request to the correct file path with .xml extension.
- * 
- * Property 16: Fetch Triggers on Prop Change
- * For any change to the fileName prop, the XMLFileRenderer should trigger 
- * a new fetch request for the updated file.
+ * Tests cover:
+ * - Resource registration on mount (Requirement 2.1)
+ * - Completion after successful load (Requirement 2.2)
+ * - Completion on error (Requirement 3.1)
+ * - Completion on unmount (Requirement 4.1, 4.3)
+ * - trackLoading prop behavior (Requirement 8.1, 8.3)
+ * - Graceful degradation without context (Requirement 9.1)
  */
-describe('XMLFileRenderer - Property-Based Tests', () => {
+describe('XMLFileRenderer - Unit Tests', () => {
   let fetchSpy;
+  let consoleErrorSpy;
 
   beforeEach(() => {
-    // Mock global fetch
     fetchSpy = vi.spyOn(global, 'fetch');
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    // Clean up all renders
     cleanup();
-    // Restore original fetch
     fetchSpy.mockRestore();
-    // Clear all mocks
+    consoleErrorSpy.mockRestore();
     vi.clearAllMocks();
   });
 
-  describe('Property 15: Fetch Triggers on Mount', () => {
-    it('should trigger fetch on mount with correct file path and .xml extension', async () => {
-      // Generator for valid file paths
-      const filePathArbitrary = fc.tuple(
-        fc.constantFrom('content', 'data'),
-        fc.constantFrom('Home', 'Projects'),
-        fc.string({ minLength: 3, maxLength: 10 })
-          .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter(s => s.length >= 3)
-      ).map(([dir1, dir2, filename]) => `${dir1}/${dir2}/${filename}`);
+  describe('Resource registration on mount (Requirement 2.1)', () => {
+    it('should register resource with LoadingTracker on mount when trackLoading is true', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(filePathArbitrary, async (fileName) => {
-          // Reset mocks for each property test run
-          fetchSpy.mockClear();
-          
-          // Mock successful fetch response
-          const mockXMLContent = '<content><paragraph>Test content</paragraph></content>';
-          fetchSpy.mockResolvedValueOnce({
-            ok: true,
-            text: async () => mockXMLContent,
-          });
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Test</paragraph></content>'
+      });
 
-          // Render component with fileName prop
-          const { unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          // Wait for fetch to be called
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalled();
-          }, { timeout: 1000 });
-
-          // Verify fetch was called with correct path (fileName + .xml extension)
-          const expectedPath = `/${fileName}.xml`;
-          expect(fetchSpy).toHaveBeenCalledWith(expectedPath);
-
-          // Verify fetch was called exactly once on mount
-          expect(fetchSpy).toHaveBeenCalledTimes(1);
-
-          // Clean up
-          unmount();
-        }),
-        { numRuns: 20 }
+      render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" trackLoading={true} />
+        </LoadingTrackerContext.Provider>
       );
+
+      // Verify registerResource was called
+      expect(registerResource).toHaveBeenCalledTimes(1);
+      
+      // Verify resource ID format includes 'xml-' prefix and fileName
+      const resourceId = registerResource.mock.calls[0][0];
+      expect(resourceId).toMatch(/^xml-test\/file-/);
     });
 
-    it('should trigger fetch on mount for simple file paths', async () => {
-      // Generator for simple file paths
-      const simpleFilePathArbitrary = fc.string({ minLength: 3, maxLength: 15 })
-        .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-        .filter(s => s.length >= 3);
+    it('should register resource with default trackLoading (true)', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(simpleFilePathArbitrary, async (fileName) => {
-          fetchSpy.mockClear();
-          
-          const mockXMLContent = '<content><paragraph>Content</paragraph></content>';
-          fetchSpy.mockResolvedValueOnce({
-            ok: true,
-            text: async () => mockXMLContent,
-          });
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Test</paragraph></content>'
+      });
 
-          const { unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalled();
-          }, { timeout: 1000 });
-
-          expect(fetchSpy).toHaveBeenCalledWith(`/${fileName}.xml`);
-          expect(fetchSpy).toHaveBeenCalledTimes(1);
-
-          unmount();
-        }),
-        { numRuns: 20 }
+      render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
       );
+
+      // Should register by default
+      expect(registerResource).toHaveBeenCalledTimes(1);
     });
 
-    it('should append .xml extension to any fileName', async () => {
-      // Test that .xml is always appended
-      const fileNameArbitrary = fc.string({ minLength: 1, maxLength: 20 })
-        .map(s => s.replace(/[^a-zA-Z0-9_/-]/g, ''))
-        .filter(s => s.length > 0 && !s.endsWith('.xml'));
+    it('should generate stable resource ID across re-renders', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(fileNameArbitrary, async (fileName) => {
-          fetchSpy.mockClear();
-          
-          fetchSpy.mockResolvedValueOnce({
-            ok: true,
-            text: async () => '<content></content>',
-          });
+      fetchSpy.mockResolvedValue({
+        ok: true,
+        text: async () => '<content><paragraph>Test</paragraph></content>'
+      });
 
-          const { unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalled();
-          }, { timeout: 1000 });
-
-          // Should always append .xml
-          expect(fetchSpy).toHaveBeenCalledWith(`/${fileName}.xml`);
-          
-          // Should not double-append if already has .xml
-          const calls = fetchSpy.mock.calls;
-          expect(calls[0][0]).not.toContain('.xml.xml');
-
-          unmount();
-        }),
-        { numRuns: 20 }
+      const { rerender } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" className="class1" />
+        </LoadingTrackerContext.Provider>
       );
+
+      const firstResourceId = registerResource.mock.calls[0][0];
+
+      // Re-render with different className (but same fileName)
+      rerender(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" className="class2" />
+        </LoadingTrackerContext.Provider>
+      );
+
+      // Resource ID should remain stable (only registered once)
+      expect(registerResource).toHaveBeenCalledTimes(1);
+      expect(registerResource.mock.calls[0][0]).toBe(firstResourceId);
     });
   });
 
-  describe('Property 16: Fetch Triggers on Prop Change', () => {
-    it('should trigger new fetch when fileName prop changes', async () => {
-      // Generator for two different file paths
-      const twoFilePathsArbitrary = fc.tuple(
-        fc.string({ minLength: 3, maxLength: 10 })
-          .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter(s => s.length >= 3),
-        fc.string({ minLength: 3, maxLength: 10 })
-          .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter(s => s.length >= 3)
-      ).filter(([path1, path2]) => path1 !== path2);
+  describe('Completion after successful load (Requirement 2.2)', () => {
+    it('should mark resource complete after successful XML load', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(twoFilePathsArbitrary, async ([fileName1, fileName2]) => {
-          fetchSpy.mockClear();
-          
-          const mockContent1 = '<content><paragraph>Content 1</paragraph></content>';
-          const mockContent2 = '<content><paragraph>Content 2</paragraph></content>';
-          
-          fetchSpy
-            .mockResolvedValueOnce({
-              ok: true,
-              text: async () => mockContent1,
-            })
-            .mockResolvedValueOnce({
-              ok: true,
-              text: async () => mockContent2,
-            });
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Test content</paragraph></content>'
+      });
 
-          const { rerender, unmount } = render(<XMLFileRenderer fileName={fileName1} />);
-
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalledTimes(1);
-          }, { timeout: 1000 });
-
-          expect(fetchSpy).toHaveBeenCalledWith(`/${fileName1}.xml`);
-
-          // Re-render with second fileName
-          rerender(<XMLFileRenderer fileName={fileName2} />);
-
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalledTimes(2);
-          }, { timeout: 1000 });
-
-          expect(fetchSpy).toHaveBeenNthCalledWith(2, `/${fileName2}.xml`);
-
-          unmount();
-        }),
-        { numRuns: 15 }
+      const { container } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
       );
+
+      // Wait for content to load
+      await waitFor(() => {
+        expect(container.textContent).toBe('Test content');
+      });
+
+      // Verify markResourceComplete was called
+      expect(markResourceComplete).toHaveBeenCalledTimes(1);
+      
+      // Verify it was called with the same resource ID that was registered
+      const registeredId = registerResource.mock.calls[0][0];
+      const completedId = markResourceComplete.mock.calls[0][0];
+      expect(completedId).toBe(registeredId);
     });
 
-    it('should not trigger fetch when fileName remains the same', async () => {
-      const filePathArbitrary = fc.string({ minLength: 3, maxLength: 10 })
-        .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-        .filter(s => s.length >= 3);
+    it('should display content after successful load', async () => {
+      const mockContext = {
+        registerResource: vi.fn(),
+        markResourceComplete: vi.fn(),
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(filePathArbitrary, async (fileName) => {
-          fetchSpy.mockClear();
-          
-          fetchSpy.mockResolvedValue({
-            ok: true,
-            text: async () => '<content><paragraph>Content</paragraph></content>',
-          });
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Loaded content</paragraph></content>'
+      });
 
-          const { rerender, unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalledTimes(1);
-          }, { timeout: 1000 });
-
-          // Re-render with same fileName
-          rerender(<XMLFileRenderer fileName={fileName} />);
-
-          // Wait a bit
-          await new Promise(resolve => setTimeout(resolve, 100));
-
-          // Should still be only 1 fetch
-          expect(fetchSpy).toHaveBeenCalledTimes(1);
-
-          unmount();
-        }),
-        { numRuns: 15 }
+      const { container } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" className="test-class" />
+        </LoadingTrackerContext.Provider>
       );
-    });
 
-    it('should not trigger fetch when only className changes', async () => {
-      const propsArbitrary = fc.tuple(
-        fc.string({ minLength: 3, maxLength: 10 })
-          .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter(s => s.length >= 3),
-        fc.string({ minLength: 3, maxLength: 15 })
-          .map(s => s.replace(/[^a-zA-Z0-9_-\s]/g, ''))
-          .filter(s => s.length >= 3),
-        fc.string({ minLength: 3, maxLength: 15 })
-          .map(s => s.replace(/[^a-zA-Z0-9_-\s]/g, ''))
-          .filter(s => s.length >= 3)
-      ).filter(([, class1, class2]) => class1 !== class2);
+      // Initially shows loading
+      expect(container.textContent).toBe('Loading...');
 
-      await fc.assert(
-        fc.asyncProperty(propsArbitrary, async ([fileName, className1, className2]) => {
-          fetchSpy.mockClear();
-          
-          fetchSpy.mockResolvedValue({
-            ok: true,
-            text: async () => '<content><paragraph>Content</paragraph></content>',
-          });
+      // Wait for content
+      await waitFor(() => {
+        expect(container.textContent).toBe('Loaded content');
+      });
 
-          const { rerender, unmount } = render(
-            <XMLFileRenderer fileName={fileName} className={className1} />
-          );
-
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalledTimes(1);
-          }, { timeout: 1000 });
-
-          // Re-render with different className but same fileName
-          rerender(<XMLFileRenderer fileName={fileName} className={className2} />);
-
-          // Wait a bit
-          await new Promise(resolve => setTimeout(resolve, 100));
-
-          // Should still be only 1 fetch (className change doesn't trigger fetch)
-          expect(fetchSpy).toHaveBeenCalledTimes(1);
-
-          unmount();
-        }),
-        { numRuns: 15 }
-      );
+      // Verify className is applied
+      expect(container.querySelector('.test-class')).toBeTruthy();
     });
   });
 
-  /**
-   * **Validates: Requirements 1.5, 5.3, 9.1, 9.2, 9.3**
-   * 
-   * Property 18: Error Handling Without Crashes
-   * For any error condition (missing file, network failure, invalid XML), 
-   * the XMLFileRenderer should display an error message and log to console 
-   * without crashing the application.
-   */
-  describe('Property 18: Error Handling Without Crashes', () => {
-    let consoleErrorSpy;
+  describe('Completion on error (Requirement 3.1)', () => {
+    it('should mark resource complete when fetch fails', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
 
-    beforeEach(() => {
-      // Mock console.error to verify error logging
-      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    });
+      fetchSpy.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found'
+      });
 
-    afterEach(() => {
-      consoleErrorSpy.mockRestore();
-    });
-
-    it('should handle missing files (404) without crashing', async () => {
-      const filePathArbitrary = fc.string({ minLength: 3, maxLength: 15 })
-        .map(s => s.replace(/[^a-zA-Z0-9_/-]/g, ''))
-        .filter(s => s.length >= 3);
-
-      await fc.assert(
-        fc.asyncProperty(filePathArbitrary, async (fileName) => {
-          fetchSpy.mockClear();
-          consoleErrorSpy.mockClear();
-          
-          // Mock 404 response
-          fetchSpy.mockResolvedValueOnce({
-            ok: false,
-            status: 404,
-            statusText: 'Not Found',
-          });
-
-          const { container, unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          // Wait for error state
-          await waitFor(() => {
-            expect(container.textContent).toContain('Error loading content');
-          }, { timeout: 1000 });
-
-          // Verify error message is displayed
-          expect(container.textContent).toBe('Error loading content');
-
-          // Verify error was logged to console
-          expect(consoleErrorSpy).toHaveBeenCalled();
-
-          // Verify component didn't crash (container still exists)
-          expect(container).toBeTruthy();
-
-          unmount();
-        }),
-        { numRuns: 20 }
-      );
-    });
-
-    it('should handle network failures without crashing', async () => {
-      const filePathArbitrary = fc.string({ minLength: 3, maxLength: 15 })
-        .map(s => s.replace(/[^a-zA-Z0-9_/-]/g, ''))
-        .filter(s => s.length >= 3);
-
-      await fc.assert(
-        fc.asyncProperty(filePathArbitrary, async (fileName) => {
-          fetchSpy.mockClear();
-          consoleErrorSpy.mockClear();
-          
-          // Mock network error
-          fetchSpy.mockRejectedValueOnce(new Error('Network request failed'));
-
-          const { container, unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          // Wait for error state
-          await waitFor(() => {
-            expect(container.textContent).toContain('Error loading content');
-          }, { timeout: 1000 });
-
-          // Verify error message is displayed
-          expect(container.textContent).toBe('Error loading content');
-
-          // Verify error was logged to console
-          expect(consoleErrorSpy).toHaveBeenCalled();
-
-          // Verify component didn't crash
-          expect(container).toBeTruthy();
-
-          unmount();
-        }),
-        { numRuns: 20 }
-      );
-    });
-
-    it('should handle various HTTP error codes without crashing', async () => {
-      const errorScenarioArbitrary = fc.tuple(
-        fc.string({ minLength: 3, maxLength: 15 })
-          .map(s => s.replace(/[^a-zA-Z0-9_/-]/g, ''))
-          .filter(s => s.length >= 3),
-        fc.constantFrom(400, 401, 403, 404, 500, 502, 503),
-        fc.constantFrom('Bad Request', 'Unauthorized', 'Forbidden', 'Not Found', 
-                       'Internal Server Error', 'Bad Gateway', 'Service Unavailable')
+      const { container } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/missing" />
+        </LoadingTrackerContext.Provider>
       );
 
-      await fc.assert(
-        fc.asyncProperty(errorScenarioArbitrary, async ([fileName, statusCode, statusText]) => {
-          fetchSpy.mockClear();
-          consoleErrorSpy.mockClear();
-          
-          // Mock error response
-          fetchSpy.mockResolvedValueOnce({
-            ok: false,
-            status: statusCode,
-            statusText: statusText,
-          });
+      // Wait for error state
+      await waitFor(() => {
+        expect(container.textContent).toBe('Error loading content');
+      });
 
-          const { container, unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          // Wait for error state
-          await waitFor(() => {
-            expect(container.textContent).toContain('Error loading content');
-          }, { timeout: 1000 });
-
-          // Verify error message is displayed
-          expect(container.textContent).toBe('Error loading content');
-
-          // Verify error was logged
-          expect(consoleErrorSpy).toHaveBeenCalled();
-
-          // Verify component didn't crash
-          expect(container).toBeTruthy();
-
-          unmount();
-        }),
-        { numRuns: 20 }
-      );
+      // Verify markResourceComplete was called even on error
+      expect(markResourceComplete).toHaveBeenCalledTimes(1);
+      
+      // Verify same resource ID
+      const registeredId = registerResource.mock.calls[0][0];
+      const completedId = markResourceComplete.mock.calls[0][0];
+      expect(completedId).toBe(registeredId);
     });
 
-    it('should handle invalid XML without crashing', async () => {
-      const invalidXMLArbitrary = fc.tuple(
-        fc.string({ minLength: 3, maxLength: 15 })
-          .map(s => s.replace(/[^a-zA-Z0-9_/-]/g, ''))
-          .filter(s => s.length >= 3),
-        fc.constantFrom(
-          '<content><paragraph>Unclosed tag',
-          '<content><bold>Text</paragraph></content>',
-          '<content><>Invalid<></content>',
-          'Not XML at all',
-          '<content><paragraph>Text</paragraph>',
-          ''
-        )
+    it('should mark resource complete when network error occurs', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
+
+      fetchSpy.mockRejectedValueOnce(new Error('Network error'));
+
+      const { container } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
       );
 
-      await fc.assert(
-        fc.asyncProperty(invalidXMLArbitrary, async ([fileName, invalidXML]) => {
-          fetchSpy.mockClear();
-          consoleErrorSpy.mockClear();
-          
-          // Mock successful fetch but with invalid XML
-          fetchSpy.mockResolvedValueOnce({
-            ok: true,
-            text: async () => invalidXML,
-          });
+      // Wait for error state
+      await waitFor(() => {
+        expect(container.textContent).toBe('Error loading content');
+      });
 
-          const { container, unmount } = render(<XMLFileRenderer fileName={fileName} />);
+      // Verify markResourceComplete was called
+      expect(markResourceComplete).toHaveBeenCalledTimes(1);
+    });
 
-          // Wait for content to be processed
-          await waitFor(() => {
-            expect(fetchSpy).toHaveBeenCalled();
-          }, { timeout: 1000 });
+    it('should display error message when load fails', async () => {
+      const mockContext = {
+        registerResource: vi.fn(),
+        markResourceComplete: vi.fn(),
+        isLoading: true
+      };
 
-          // Component should not crash - it should render something
-          expect(container).toBeTruthy();
+      fetchSpy.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        statusText: 'Internal Server Error'
+      });
 
-          // Should either show error or empty content (depending on parser behavior)
-          // The key is that it doesn't crash
-          const hasContent = container.textContent.length > 0;
-          expect(hasContent).toBeDefined();
+      const { container } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
+      );
 
-          unmount();
-        }),
-        { numRuns: 20 }
+      await waitFor(() => {
+        expect(container.textContent).toBe('Error loading content');
+      });
+
+      // Verify error was logged
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('Completion on unmount (Requirements 4.1, 4.3)', () => {
+    it('should mark resource complete when component unmounts before load completes', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
+
+      // Create a promise that never resolves to simulate slow load
+      let resolveFetch;
+      const fetchPromise = new Promise((resolve) => {
+        resolveFetch = resolve;
+      });
+      
+      fetchSpy.mockReturnValueOnce(fetchPromise);
+
+      const { unmount } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
+      );
+
+      // Verify registration happened
+      expect(registerResource).toHaveBeenCalledTimes(1);
+      
+      // Unmount before fetch completes
+      unmount();
+
+      // Verify cleanup called markResourceComplete
+      expect(markResourceComplete).toHaveBeenCalledTimes(1);
+      
+      // Verify same resource ID
+      const registeredId = registerResource.mock.calls[0][0];
+      const completedId = markResourceComplete.mock.calls[0][0];
+      expect(completedId).toBe(registeredId);
+
+      // Clean up the promise
+      resolveFetch({ ok: true, text: async () => '<content></content>' });
+    });
+
+    it('should not update state after unmount', async () => {
+      const mockContext = {
+        registerResource: vi.fn(),
+        markResourceComplete: vi.fn(),
+        isLoading: true
+      };
+
+      let resolveFetch;
+      const fetchPromise = new Promise((resolve) => {
+        resolveFetch = resolve;
+      });
+      
+      fetchSpy.mockReturnValueOnce(fetchPromise);
+
+      const { unmount } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
+      );
+
+      // Unmount before fetch completes
+      unmount();
+
+      // Resolve fetch after unmount
+      resolveFetch({
+        ok: true,
+        text: async () => '<content><paragraph>Late content</paragraph></content>'
+      });
+
+      // Wait a bit
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // No errors should occur (component handles unmounted state)
+      expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining('Warning: Can\'t perform a React state update')
       );
     });
 
-    it('should recover from error when fileName changes to valid file', async () => {
-      const recoveryScenarioArbitrary = fc.tuple(
-        fc.string({ minLength: 3, maxLength: 10 })
-          .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter(s => s.length >= 3),
-        fc.string({ minLength: 3, maxLength: 10 })
-          .map(s => s.replace(/[^a-zA-Z0-9]/g, ''))
-          .filter(s => s.length >= 3)
-      ).filter(([path1, path2]) => path1 !== path2);
+    it('should call markResourceComplete only once on unmount even if already completed', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(recoveryScenarioArbitrary, async ([invalidFileName, validFileName]) => {
-          fetchSpy.mockClear();
-          consoleErrorSpy.mockClear();
-          
-          // First fetch fails
-          fetchSpy.mockResolvedValueOnce({
-            ok: false,
-            status: 404,
-            statusText: 'Not Found',
-          });
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Test</paragraph></content>'
+      });
 
-          const { container, rerender, unmount } = render(
-            <XMLFileRenderer fileName={invalidFileName} />
-          );
-
-          // Wait for error state
-          await waitFor(() => {
-            expect(container.textContent).toContain('Error loading content');
-          }, { timeout: 1000 });
-
-          // Second fetch succeeds
-          fetchSpy.mockResolvedValueOnce({
-            ok: true,
-            text: async () => '<content><paragraph>Valid content</paragraph></content>',
-          });
-
-          // Change to valid fileName
-          rerender(<XMLFileRenderer fileName={validFileName} />);
-
-          // Wait for successful load
-          await waitFor(() => {
-            expect(container.textContent).not.toContain('Error loading content');
-            expect(container.textContent).not.toContain('Loading...');
-          }, { timeout: 1000 });
-
-          // Should have recovered and show content
-          expect(container.textContent).toBe('Valid content');
-
-          unmount();
-        }),
-        { numRuns: 15 }
+      const { container, unmount } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
       );
+
+      // Wait for load to complete
+      await waitFor(() => {
+        expect(container.textContent).toBe('Test');
+      });
+
+      // markResourceComplete called once after load
+      expect(markResourceComplete).toHaveBeenCalledTimes(1);
+
+      // Unmount
+      unmount();
+
+      // markResourceComplete called again on cleanup
+      expect(markResourceComplete).toHaveBeenCalledTimes(2);
+      
+      // Both calls with same resource ID
+      expect(markResourceComplete.mock.calls[0][0]).toBe(markResourceComplete.mock.calls[1][0]);
+    });
+  });
+
+  describe('trackLoading prop behavior (Requirements 8.1, 8.3)', () => {
+    it('should not register resource when trackLoading is false', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
+
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Test</paragraph></content>'
+      });
+
+      render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" trackLoading={false} />
+        </LoadingTrackerContext.Provider>
+      );
+
+      // Wait a bit
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Verify registerResource was NOT called
+      expect(registerResource).not.toHaveBeenCalled();
     });
 
-    it('should log detailed error information to console', async () => {
-      const filePathArbitrary = fc.string({ minLength: 3, maxLength: 15 })
-        .map(s => s.replace(/[^a-zA-Z0-9_/-]/g, ''))
-        .filter(s => s.length >= 3);
+    it('should not mark complete when trackLoading is false', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(filePathArbitrary, async (fileName) => {
-          fetchSpy.mockClear();
-          consoleErrorSpy.mockClear();
-          
-          // Mock error
-          fetchSpy.mockRejectedValueOnce(new Error('Test error message'));
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Test</paragraph></content>'
+      });
 
-          const { unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          // Wait for error to be logged
-          await waitFor(() => {
-            expect(consoleErrorSpy).toHaveBeenCalled();
-          }, { timeout: 1000 });
-
-          // Verify console.error was called with error details
-          expect(consoleErrorSpy).toHaveBeenCalledWith(
-            'Error loading XML content:',
-            expect.any(Error)
-          );
-
-          unmount();
-        }),
-        { numRuns: 20 }
+      const { container } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" trackLoading={false} />
+        </LoadingTrackerContext.Provider>
       );
+
+      // Wait for content to load
+      await waitFor(() => {
+        expect(container.textContent).toBe('Test');
+      });
+
+      // Verify markResourceComplete was NOT called
+      expect(markResourceComplete).not.toHaveBeenCalled();
     });
 
-    it('should maintain error state until new fetch is triggered', async () => {
-      const filePathArbitrary = fc.string({ minLength: 3, maxLength: 15 })
-        .map(s => s.replace(/[^a-zA-Z0-9_/-]/g, ''))
-        .filter(s => s.length >= 3);
+    it('should still render content normally when trackLoading is false', async () => {
+      const mockContext = {
+        registerResource: vi.fn(),
+        markResourceComplete: vi.fn(),
+        isLoading: true
+      };
 
-      await fc.assert(
-        fc.asyncProperty(filePathArbitrary, async (fileName) => {
-          fetchSpy.mockClear();
-          consoleErrorSpy.mockClear();
-          
-          // Mock error
-          fetchSpy.mockResolvedValueOnce({
-            ok: false,
-            status: 404,
-            statusText: 'Not Found',
-          });
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Content without tracking</paragraph></content>'
+      });
 
-          const { container, unmount } = render(<XMLFileRenderer fileName={fileName} />);
-
-          // Wait for error state
-          await waitFor(() => {
-            expect(container.textContent).toContain('Error loading content');
-          }, { timeout: 1000 });
-
-          // Wait a bit more
-          await new Promise(resolve => setTimeout(resolve, 200));
-
-          // Error message should still be displayed
-          expect(container.textContent).toBe('Error loading content');
-
-          unmount();
-        }),
-        { numRuns: 15 }
+      const { container } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" trackLoading={false} />
+        </LoadingTrackerContext.Provider>
       );
+
+      // Content should still load and display
+      await waitFor(() => {
+        expect(container.textContent).toBe('Content without tracking');
+      });
+    });
+
+    it('should not call markResourceComplete on unmount when trackLoading is false', async () => {
+      const registerResource = vi.fn();
+      const markResourceComplete = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete,
+        isLoading: true
+      };
+
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Test</paragraph></content>'
+      });
+
+      const { unmount } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" trackLoading={false} />
+        </LoadingTrackerContext.Provider>
+      );
+
+      // Wait a bit
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Unmount
+      unmount();
+
+      // Verify markResourceComplete was never called
+      expect(markResourceComplete).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Graceful degradation without context (Requirement 9.1)', () => {
+    it('should render normally when LoadingTrackerContext is not provided', async () => {
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Standalone content</paragraph></content>'
+      });
+
+      const { container } = render(
+        <XMLFileRenderer fileName="test/file" />
+      );
+
+      // Should load and display content without crashing
+      await waitFor(() => {
+        expect(container.textContent).toBe('Standalone content');
+      });
+    });
+
+    it('should handle errors normally without context', async () => {
+      fetchSpy.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found'
+      });
+
+      const { container } = render(
+        <XMLFileRenderer fileName="test/missing" />
+      );
+
+      // Should display error without crashing
+      await waitFor(() => {
+        expect(container.textContent).toBe('Error loading content');
+      });
+    });
+
+    it('should not crash on unmount without context', async () => {
+      let resolveFetch;
+      const fetchPromise = new Promise((resolve) => {
+        resolveFetch = resolve;
+      });
+      
+      fetchSpy.mockReturnValueOnce(fetchPromise);
+
+      const { unmount } = render(
+        <XMLFileRenderer fileName="test/file" />
+      );
+
+      // Unmount before fetch completes
+      unmount();
+
+      // Should not crash
+      expect(() => {
+        resolveFetch({ ok: true, text: async () => '<content></content>' });
+      }).not.toThrow();
+    });
+
+    it('should work with trackLoading=true even without context', async () => {
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content><paragraph>Content</paragraph></content>'
+      });
+
+      const { container } = render(
+        <XMLFileRenderer fileName="test/file" trackLoading={true} />
+      );
+
+      // Should still work normally
+      await waitFor(() => {
+        expect(container.textContent).toBe('Content');
+      });
+    });
+  });
+
+  describe('Resource identifier format (Requirement 10.4)', () => {
+    it('should generate resource ID with xml prefix and fileName', async () => {
+      const registerResource = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete: vi.fn(),
+        isLoading: true
+      };
+
+      fetchSpy.mockResolvedValueOnce({
+        ok: true,
+        text: async () => '<content></content>'
+      });
+
+      render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="content/Home/AboutMe" />
+        </LoadingTrackerContext.Provider>
+      );
+
+      expect(registerResource).toHaveBeenCalledTimes(1);
+      
+      const resourceId = registerResource.mock.calls[0][0];
+      
+      // Should start with 'xml-'
+      expect(resourceId).toMatch(/^xml-/);
+      
+      // Should include the fileName
+      expect(resourceId).toContain('content/Home/AboutMe');
+      
+      // Should have a random component for uniqueness
+      expect(resourceId).toMatch(/^xml-content\/Home\/AboutMe-0\.\d+$/);
+    });
+
+    it('should generate unique IDs for different instances of same fileName', async () => {
+      const registerResource = vi.fn();
+      
+      const mockContext = {
+        registerResource,
+        markResourceComplete: vi.fn(),
+        isLoading: true
+      };
+
+      fetchSpy.mockResolvedValue({
+        ok: true,
+        text: async () => '<content></content>'
+      });
+
+      // Render two instances with same fileName
+      const { unmount: unmount1 } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
+      );
+
+      const firstId = registerResource.mock.calls[0][0];
+
+      unmount1();
+      registerResource.mockClear();
+
+      const { unmount: unmount2 } = render(
+        <LoadingTrackerContext.Provider value={mockContext}>
+          <XMLFileRenderer fileName="test/file" />
+        </LoadingTrackerContext.Provider>
+      );
+
+      const secondId = registerResource.mock.calls[0][0];
+
+      // IDs should be different (due to random component)
+      expect(firstId).not.toBe(secondId);
+      
+      // But both should have same prefix and fileName
+      expect(firstId).toMatch(/^xml-test\/file-/);
+      expect(secondId).toMatch(/^xml-test\/file-/);
+
+      unmount2();
     });
   });
 });

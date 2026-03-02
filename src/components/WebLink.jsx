@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import WebPageImage from './WebPageImage';
 
 function validateProps(link, text, img) {
     if (!link || link === '') {
@@ -19,16 +20,18 @@ function isExternalLink(link) {
            link.startsWith('//');
 }
 
-function renderContent(text, img, imageSize, fontSize) {
+function renderContent(text, img, imageSize, fontSize, trackLoading) {
     if (img && text) {
         // Both image and text - image on top, text underneath
         return (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <img 
+                <WebPageImage 
                     src={img} 
-                    alt={text} 
-                    className="web-link-image"
-                    style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
+                    alt={text}
+                    size={imageSize}
+                    padding={0}
+                    trackLoading={trackLoading}
+                    fixedSize={true}
                 />
                 <span style={{ fontSize: `${fontSize}px`, marginTop: '8px' }}>{text}</span>
             </div>
@@ -38,11 +41,13 @@ function renderContent(text, img, imageSize, fontSize) {
     if (img) {
         // Image only - empty alt text
         return (
-            <img 
+            <WebPageImage 
                 src={img} 
-                alt="" 
-                className="web-link-image"
-                style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
+                alt=""
+                size={imageSize}
+                padding={0}
+                trackLoading={trackLoading}
+                fixedSize={true}
             />
         );
     }
@@ -51,10 +56,10 @@ function renderContent(text, img, imageSize, fontSize) {
     return <span style={{ fontSize: `${fontSize}px` }}>{text}</span>;
 }
 
-function WebLink({ link, text, img, imageSize = 200, fontSize = 24 }) {
+function WebLink({ link, text, img, imageSize = 200, fontSize = 24, trackLoading = true }) {
     validateProps(link, text, img);
 
-    const content = renderContent(text, img, imageSize, fontSize);
+    const content = renderContent(text, img, imageSize, fontSize, trackLoading);
     const isExternal = isExternalLink(link);
 
     if (isExternal) {

@@ -1,5 +1,6 @@
 import XMLFileRenderer from "../../components/XMLFileRenderer";
-import Screenshot from "../../components/Screenshot";
+import WebPageImage from "../../components/WebPageImage";
+import PageLoader from "../../components/PageLoader";
 
 /*
     Required content:
@@ -13,12 +14,14 @@ import Screenshot from "../../components/Screenshot";
 function GambitAndTheAnchored() {
     
     return (
-        <div>
-            <XMLFileRenderer fileName="content/GambitAnchored/GatA_Title" />
-            <XMLFileRenderer fileName="content/GambitAnchored/GtaA_Content" />
-            <Screenshot src="/images/GambitAndTheAnchored/GaA-img1.png" alt="Gambit And The Anchored Screenshot 1" />
-            <Screenshot src="/images/GambitAndTheAnchored/GaA-img2.png" alt="Gambit And The Anchored Screenshot 2" />
-        </div>
+        <PageLoader>
+            <div>
+                <XMLFileRenderer fileName="content/GambitAnchored/GatA_Title" />
+                <XMLFileRenderer fileName="content/GambitAnchored/GtaA_Content" />
+                <WebPageImage src="/images/GambitAndTheAnchored/GaA-img1.png" alt="Gambit And The Anchored Screenshot 1" />
+                <WebPageImage src="/images/GambitAndTheAnchored/GaA-img2.png" alt="Gambit And The Anchored Screenshot 2" />
+            </div>
+        </PageLoader>
     );
 }
 
