@@ -1,0 +1,19 @@
+/* YouTubeVideo Component Styles */
+
+.youtube-video-container {
+  max-width: 100%;
+  display: inline-block;
+}
+
+.youtube-video-container iframe {
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .youtube-video-container iframe {
+    width: 100%;
+  }
+}

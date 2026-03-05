@@ -1,42 +1,44 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { LoadingTrackerContext } from '../contexts/LoadingTrackerContext';
+
+let imageIdCounter = 0;
 
 function WebPageImage({ src, alt, size = 600, padding = 10, trackLoading = true, fixedSize = false }) {
     const context = useContext(LoadingTrackerContext);
-    const resourceId = useRef(`img-${src}-${Math.random()}`).current;
-    const [imageLoaded, setImageLoaded] = useState(false);
+    // Use module-level counter to generate unique IDs without calling impure functions during render
+    const resourceId = useRef(null);
+    if (!resourceId.current) {
+        resourceId.current = `img-${src}-${++imageIdCounter}`;
+    }
     const imageLoadedRef = useRef(false);
 
     useEffect(() => {
         // Register this image with the page loader if context is available
         if (trackLoading && context) {
-            context.registerResource(resourceId);
+            context.registerResource(resourceId.current);
         }
 
         return () => {
             // Cleanup: ensure resource is marked complete on unmount
             // Use ref to get the current value, not the closure value
             if (trackLoading && context && !imageLoadedRef.current) {
-                context.markResourceComplete(resourceId);
+                context.markResourceComplete(resourceId.current);
             }
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [trackLoading, context, resourceId]);
+    }, [trackLoading, context]);
 
     const handleLoad = () => {
-        setImageLoaded(true);
         imageLoadedRef.current = true;
         if (trackLoading && context) {
-            context.markResourceComplete(resourceId);
+            context.markResourceComplete(resourceId.current);
         }
     };
 
     const handleError = () => {
-        setImageLoaded(true);
         imageLoadedRef.current = true;
         // Mark as complete even on error to unblock page
         if (trackLoading && context) {
-            context.markResourceComplete(resourceId);
+            context.markResourceComplete(resourceId.current);
         }
     };
 

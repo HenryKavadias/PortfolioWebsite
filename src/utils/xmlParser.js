@@ -126,10 +126,11 @@ function mapTagToComponent(tagName, attributes, children, key) {
     case 'br':
       return React.createElement('br', props);
 
-    case 'heading':
+    case 'heading': {
       const level = attributes.level || 2;
       const headingTag = `h${level}`;
       return React.createElement(headingTag, props, ...children);
+    }
 
     case 'h1':
       return React.createElement('h1', props, ...children);
@@ -149,9 +150,10 @@ function mapTagToComponent(tagName, attributes, children, key) {
     case 'h6':
       return React.createElement('h6', props, ...children);
 
-    case 'list':
+    case 'list': {
       const listTag = attributes.type === 'ordered' ? 'ol' : 'ul';
       return React.createElement(listTag, props, ...children);
+    }
 
     case 'item':
       return React.createElement('li', props, ...children);

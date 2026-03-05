@@ -2,6 +2,8 @@ import { useState, useEffect, useContext, useRef } from 'react';
 import { parseXMLToReact } from '../utils/xmlParser';
 import { LoadingTrackerContext } from '../contexts/LoadingTrackerContext';
 
+let xmlIdCounter = 0;
+
 /**
  * Fetches an XML file from the public directory
  * @param {string} filepath - Path to the file without extension
@@ -31,15 +33,18 @@ function XMLFileRenderer({ fileName, className, trackLoading = true }) {
   // Access LoadingTrackerContext (may be undefined if not within PageLoader)
   const loadingTracker = useContext(LoadingTrackerContext);
   
-  // Generate stable resource ID using useRef
-  const resourceId = useRef(`xml-${fileName}-${Math.random()}`).current;
+  // Use module-level counter to generate unique IDs without calling impure functions during render
+  const resourceId = useRef(null);
+  if (resourceId.current === null) {
+    resourceId.current = `xml-${fileName}-${++xmlIdCounter}`;
+  }
 
   useEffect(() => {
     let isMounted = true;
     
     // Register resource with LoadingTracker if context is available and tracking is enabled
     if (trackLoading && loadingTracker?.registerResource) {
-      loadingTracker.registerResource(resourceId);
+      loadingTracker.registerResource(resourceId.current);
     }
 
     async function loadContent() {
@@ -56,7 +61,7 @@ function XMLFileRenderer({ fileName, className, trackLoading = true }) {
           
           // Mark resource as complete after successful load
           if (trackLoading && loadingTracker?.markResourceComplete) {
-            loadingTracker.markResourceComplete(resourceId);
+            loadingTracker.markResourceComplete(resourceId.current);
           }
         }
       } catch (err) {
@@ -67,7 +72,7 @@ function XMLFileRenderer({ fileName, className, trackLoading = true }) {
           
           // Mark resource as complete even on error to prevent blocking
           if (trackLoading && loadingTracker?.markResourceComplete) {
-            loadingTracker.markResourceComplete(resourceId);
+            loadingTracker.markResourceComplete(resourceId.current);
           }
         }
       }
@@ -80,10 +85,10 @@ function XMLFileRenderer({ fileName, className, trackLoading = true }) {
       
       // Mark resource as complete on unmount for cleanup
       if (trackLoading && loadingTracker?.markResourceComplete) {
-        loadingTracker.markResourceComplete(resourceId);
+        loadingTracker.markResourceComplete(resourceId.current);
       }
     };
-  }, [fileName, trackLoading, loadingTracker, resourceId]);
+  }, [fileName, trackLoading, loadingTracker]);
 
   // Render logic based on state
   if (loading) {

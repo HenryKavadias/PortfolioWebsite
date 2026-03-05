@@ -1,5 +1,6 @@
 import { createContext, useState, useCallback, useMemo } from 'react';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const LoadingTrackerContext = createContext({
   registerResource: () => {},
   markResourceComplete: () => {},

@@ -5,6 +5,8 @@ import DodgeWest from "./pages/projects/DodgeWest";
 import FriendInMe from "./pages/projects/FriendInMe";
 import EggEscape from "./pages/projects/EggEscape";
 import GambitAndTheAnchored from "./pages/projects/GambitAndTheAnchored";
+import YouTubeTest from "./pages/YouTubeTest";
+import YouTubeErrorTest from "./pages/YouTubeErrorTest";
 import NavBar from "./components/NavBar";
 import './css/App.css';
 
@@ -23,6 +25,8 @@ function App() {
           <Route path="/friendinme" element={<FriendInMe />} />
           <Route path="/eggescape" element={<EggEscape />} />
           <Route path="/gambitandtheanchored" element={<GambitAndTheAnchored />} />
+          <Route path="/youtube-test" element={<YouTubeTest />} />
+          <Route path="/youtube-error-test" element={<YouTubeErrorTest />} />
         </Routes>
       </main>
     </div>
