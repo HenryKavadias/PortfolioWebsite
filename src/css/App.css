@@ -1,3 +1,29 @@
+
+.App {
+  height: 100%;
+  width: 100%;
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-top: 5rem;
+  text-align: center;
+}
+
+/* Fix for list item alignment - override inherited center alignment */
+.main-content ul,
+.main-content ol {
+  text-align: left;
+  display: inline-block;
+}
+
+.main-content li {
+  text-align: left;
+}
+
+/*
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,7 +31,6 @@
   text-align: center;
 }
 
-/* Fix for list item alignment - override inherited center alignment */
 #root ul,
 #root ol {
   text-align: left;
@@ -16,59 +41,7 @@
   text-align: left;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-.author-name {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #000000;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  text-decoration: none;
-  color: inherit;
-  transition: background-color 0.2s;
-}
-
-.author-name:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
 .read-the-docs {
   color: #888;
 }
+*/

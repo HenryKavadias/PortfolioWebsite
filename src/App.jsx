@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import './css/App.css'
 import { Home, Purger, DodgeWest, FriendInMe, EggEscape, GambitAndTheAnchored, YouTubeTest, YouTubeErrorTest } from "./pages";
@@ -6,10 +6,8 @@ import { Home, Purger, DodgeWest, FriendInMe, EggEscape, GambitAndTheAnchored, Y
 
 function App() {
   
-
   return (
     <div>
-      <Link to="/" className="author-name">Henry Kavadias-Barnes</Link>
       <NavBar />
       <main className='main-content'>
         <Routes>
