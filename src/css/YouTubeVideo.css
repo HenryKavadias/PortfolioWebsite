@@ -1,8 +1,10 @@
 /* YouTubeVideo Component Styles */
 
 .youtube-video-container {
-  max-width: 100%;
+  max-width: 800px;
   display: inline-block;
+  margin: 1rem;
+  vertical-align: top;
 }
 
 .youtube-video-container iframe {
@@ -13,6 +15,11 @@
 
 /* Responsive breakpoints */
 @media (max-width: 768px) {
+  .youtube-video-container {
+    display: block;
+    margin: 1rem auto;
+  }
+  
   .youtube-video-container iframe {
     width: 100%;
   }

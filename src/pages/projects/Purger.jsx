@@ -18,6 +18,7 @@ function Purger() {
             <div>
                 <XMLFileRenderer fileName="content/Purger/P_Title" />
                 <XMLFileRenderer fileName="content/Purger/P_Content" />
+                <XMLFileRenderer fileName="content/Purger/P_Links" />
                 {/* Example YouTube video - replace with actual Purger gameplay video URL */}
                 <YouTubeVideo 
                     url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" 

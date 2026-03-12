@@ -19,6 +19,7 @@ function DodgeWest() {
             <div>
                 <XMLFileRenderer fileName="content/DodgeWest/DW_Title" />
                 <XMLFileRenderer fileName="content/DodgeWest/DW_Content" />
+                <XMLFileRenderer fileName="content/DodgeWest/DW_Links" />
                 <XMLFileRenderer fileName="content/DodgeWest/DW_MC_Title" />
                 <XMLFileRenderer fileName="content/DodgeWest/DW_MajorContributions" />
                 <WebPageImage src="/images/DodgeWest/DW_Level1.png" alt="Dodge West Screenshot 1" size={400} />

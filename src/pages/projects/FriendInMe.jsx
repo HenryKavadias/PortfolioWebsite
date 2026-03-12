@@ -19,6 +19,7 @@ function FriendInMe() {
             <div>
                 <XMLFileRenderer fileName="content/FriendInMe/FIM_Title" />
                 <XMLFileRenderer fileName="content/FriendInMe/FIM_Content" />
+                <XMLFileRenderer fileName="content/FriendInMe/FIM_Links" />
                 <WebPageImage src="/images/FriendInMe/FriendInMeScreenshot1.png" alt="FriendInMe Screenshot 1" size={400} />
                 <WebPageImage src="/images/FriendInMe/FriendInMeScreenshot2.png" alt="FriendInMe Screenshot 2" size={400} />
                 <WebPageImage src="/images/FriendInMe/FriendInMeScreenshot3.png" alt="FriendInMe Screenshot 3" size={400} />

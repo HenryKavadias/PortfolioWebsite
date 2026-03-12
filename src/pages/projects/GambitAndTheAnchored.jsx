@@ -18,6 +18,7 @@ function GambitAndTheAnchored() {
             <div>
                 <XMLFileRenderer fileName="content/GambitAnchored/GatA_Title" />
                 <XMLFileRenderer fileName="content/GambitAnchored/GtaA_Content" />
+                <XMLFileRenderer fileName="content/GambitAnchored/GatA_Links" />
                 <WebPageImage src="/images/GambitAndTheAnchored/GaA-img1.png" alt="Gambit And The Anchored Screenshot 1" />
                 <WebPageImage src="/images/GambitAndTheAnchored/GaA-img2.png" alt="Gambit And The Anchored Screenshot 2" />
             </div>

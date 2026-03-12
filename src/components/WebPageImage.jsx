@@ -3,7 +3,7 @@ import { LoadingTrackerContext } from '../contexts/LoadingTrackerContext';
 
 let imageIdCounter = 0;
 
-function WebPageImage({ src, alt, size = 600, padding = 10, trackLoading = true, fixedSize = false }) {
+function WebPageImage({ src, alt, size = 800, padding = 10, trackLoading = true, fixedSize = false }) {
     const context = useContext(LoadingTrackerContext);
     // Use module-level counter to generate unique IDs without calling impure functions during render
     const resourceId = useRef(null);

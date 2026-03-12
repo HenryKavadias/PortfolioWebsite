@@ -18,6 +18,7 @@ function EggEscape() {
             <div>
                 <XMLFileRenderer fileName="content/EggEscape/EE_Title" />
                 <XMLFileRenderer fileName="content/EggEscape/EE_Content" />
+                <XMLFileRenderer fileName="content/EggEscape/EE_Links" />
                 <WebPageImage src="/images/EggEscape/EggEscape-img1.png" alt="EggEscape Screenshot 1" size={400} />
                 <WebPageImage src="/images/EggEscape/EggEscape-img2.png" alt="EggEscape Screenshot 2" size={400} />
                 <WebPageImage src="/images/EggEscape/EggEscape-img3.png" alt="EggEscape Screenshot 3" size={400} />

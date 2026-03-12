@@ -12,6 +12,33 @@
   text-align: center;
 }
 
+/* Layout for video and text side by side */
+.content-with-video {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.content-with-video .text-content {
+  flex: 1;
+  min-width: 300px;
+  text-align: left;
+}
+
+.content-with-video .youtube-video-container {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Image gallery styling */
+.web-link-image {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
 /* Fix for list item alignment - override inherited center alignment */
 .main-content ul,
 .main-content ol {
@@ -21,6 +48,17 @@
 
 .main-content li {
   text-align: left;
+}
+
+/* Responsive: stack video and text on smaller screens */
+@media (max-width: 768px) {
+  .content-with-video {
+    flex-direction: column;
+  }
+  
+  .content-with-video .text-content {
+    text-align: center;
+  }
 }
 
 /*
