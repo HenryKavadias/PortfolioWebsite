@@ -1,14 +1,8 @@
 import { Routes, Route, Link } from "react-router-dom";
-import Home from "./pages/Home";
-import Purger from "./pages/projects/Purger";
-import DodgeWest from "./pages/projects/DodgeWest";
-import FriendInMe from "./pages/projects/FriendInMe";
-import EggEscape from "./pages/projects/EggEscape";
-import GambitAndTheAnchored from "./pages/projects/GambitAndTheAnchored";
-import YouTubeTest from "./pages/YouTubeTest";
-import YouTubeErrorTest from "./pages/YouTubeErrorTest";
 import NavBar from "./components/NavBar";
-import './css/App.css';
+import './css/App.css'
+import { Home, Purger, DodgeWest, FriendInMe, EggEscape, GambitAndTheAnchored, YouTubeTest, YouTubeErrorTest } from "./pages";
+
 
 function App() {
   
@@ -25,6 +19,7 @@ function App() {
           <Route path="/friendinme" element={<FriendInMe />} />
           <Route path="/eggescape" element={<EggEscape />} />
           <Route path="/gambitandtheanchored" element={<GambitAndTheAnchored />} />
+          {/* test routes */}
           <Route path="/youtube-test" element={<YouTubeTest />} />
           <Route path="/youtube-error-test" element={<YouTubeErrorTest />} />
         </Routes>
