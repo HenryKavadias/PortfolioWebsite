@@ -1,0 +1,13 @@
+.web-link {
+    color: #3b82f6;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: background-color 0.2s, color 0.2s;
+    display: inline-block;
+}
+
+.web-link:hover {
+    background-color: rgba(55, 55, 55, 0.4);
+    color: #f97316;
+}

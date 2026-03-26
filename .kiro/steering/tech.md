@@ -1,45 +1,34 @@
-# Technology Stack
+# Tech Stack
 
 ## Core Technologies
-- **React 19.2.0** - UI library with latest features
+- **React 19.2.0** - UI framework
 - **Vite 7.2.4** - Build tool and dev server
-- **JavaScript (ES Modules)** - No TypeScript currently used
-- **CSS** - Standard CSS for styling
+- **React Router DOM 7.13.1** - Client-side routing
 
-## Build System
-- **Vite** - Fast build tool with HMR (Hot Module Replacement)
-- **ESLint** - Code linting with React-specific rules
-- **ES Modules** - Modern JavaScript module system
+## Development Tools
+- **ESLint** - Code linting with React-specific plugins
+- **@vitejs/plugin-react** - Vite plugin for React with Fast Refresh
 
-## Development Dependencies
-- `@vitejs/plugin-react` - React support for Vite
-- `eslint-plugin-react-hooks` - React Hooks linting rules
-- `eslint-plugin-react-refresh` - React Fast Refresh support
+## Language
+- JavaScript (ES modules) - No TypeScript currently used
 
 ## Common Commands
 
-### Development
 ```bash
-npm run dev          # Start development server with HMR
-npm run preview      # Preview production build locally
+# Start development server with hot reload
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build locally
+npm run preview
+
+# Run linter
+npm run lint
 ```
 
-### Build & Deploy
-```bash
-npm run build        # Create production build in dist/
-```
-
-### Code Quality
-```bash
-npm run lint         # Run ESLint on all files
-```
-
-## Development Server
-- Runs on Vite's default port (usually 5173)
-- Includes Hot Module Replacement for fast development
-- Serves static assets from `public/` directory
-
-## Build Output
-- Production files generated in `dist/` directory
-- Optimized and minified for deployment
-- Static assets are processed and optimized
+## Build Configuration
+- Vite config is minimal, using default settings with React plugin
+- Module type: ES modules
+- No custom build optimizations or aliases configured

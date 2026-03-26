@@ -1,16 +1,110 @@
-# React + Vite
+# Portfolio Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal portfolio website showcasing game development projects by Henry Kavadias-Barnes.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Home page with bio and contact information
+- Individual project showcase pages for multiple games
+- Dynamic content loading from XML files
+- YouTube video embedding with loading coordination
+- Responsive design with custom styling
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19.2.0** - UI framework
+- **Vite 7.2.4** - Build tool and dev server
+- **React Router DOM 7.13.1** - Client-side routing
+- **ESLint** - Code linting
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Run linter
+npm run lint
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## Project Structure
+
+```
+src/
+├── components/       # Reusable React components
+│   ├── YouTubeVideo.jsx       # YouTube video embedding
+│   ├── XMLFileRenderer.jsx    # XML content rendering
+│   ├── WebLink.jsx            # Enhanced link component
+│   ├── PageLoader.jsx         # Page loading coordination
+│   └── ...
+├── contexts/         # React context providers
+│   └── LoadingTrackerContext.jsx
+├── pages/           # Route-level page components
+│   ├── Home.jsx
+│   └── projects/    # Individual project pages
+└── css/             # Component-specific styles
+
+public/
+├── content/         # XML content files by project
+└── images/          # Static images by project
+```
+
+## Key Components
+
+### YouTubeVideo
+
+Embeds YouTube videos with loading tracking integration.
+
+```jsx
+import YouTubeVideo from './components/YouTubeVideo';
+
+<YouTubeVideo 
+  url="https://www.youtube.com/watch?v=VIDEO_ID"
+  width={800}
+  height={450}
+  title="Video description"
+/>
+```
+
+See [YouTubeVideo Usage Guide](.kiro/specs/youtube-video-component/USAGE.md) for detailed documentation.
+
+### XMLFileRenderer
+
+Dynamically loads and renders XML content files.
+
+### PageLoader
+
+Coordinates page loading states with resource tracking.
+
+## Development
+
+The project uses Vite for fast development with Hot Module Replacement (HMR). All components are functional components using React hooks.
+
+### Code Quality
+
+- ESLint configured with React-specific rules
+- 100% test coverage for core components
+- Property-based testing with fast-check
+
+## Browser Support
+
+Modern browsers with ES6+ support:
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
