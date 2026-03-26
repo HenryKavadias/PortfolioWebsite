@@ -2,7 +2,7 @@
   "name": "henryportfoliowebsite",
   "private": true,
   "version": "1.0.0",
-  "homepage": "https://henrykavadias.github.io/PortfolioWebsite",
+  "homepage": "https://henrykavadias.github.io/PortfolioWebsite/",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "test": "vitest --run",
     "test:watch": "vitest",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^19.2.0",
