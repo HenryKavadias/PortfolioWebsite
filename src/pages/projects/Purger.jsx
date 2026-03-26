@@ -36,10 +36,10 @@ function Purger() {
                     </div>
                 </div>
                 <div className="ImageBlock-A">
-                <WebPageImage src="/images/Purger/PurgerScreenshot1.png" alt="Purger Screenshot 1" size={320} />
-                <WebPageImage src="/images/Purger/PurgerScreenshot2.png" alt="Purger Screenshot 2" size={320} />
-                <WebPageImage src="/images/Purger/PurgerScreenshot3.png" alt="Purger Screenshot 3" size={320} />
-                <WebPageImage src="/images/Purger/PurgerScreenshot4.png" alt="Purger Screenshot 4" size={320} />
+                <WebPageImage src="/images/Purger/PurgerScreenShot1.png" alt="Purger Screenshot 1" size={320} />
+                <WebPageImage src="/images/Purger/PurgerScreenShot2.png" alt="Purger Screenshot 2" size={320} />
+                <WebPageImage src="/images/Purger/PurgerScreenShot3.png" alt="Purger Screenshot 3" size={320} />
+                <WebPageImage src="/images/Purger/PurgerScreenShot4.png" alt="Purger Screenshot 4" size={320} />
                 </div>
             </div>
         </PageLoader>

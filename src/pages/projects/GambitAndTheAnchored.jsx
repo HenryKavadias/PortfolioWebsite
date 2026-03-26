@@ -40,8 +40,8 @@ function GambitAndTheAnchored() {
                 </div>
                 
                 <div className="ImageBlock-A">
-                    <WebPageImage src="/images/GambitAndTheAnchored/GaA-img1.png" alt="Gambit And The Anchored Screenshot 1" size={600} />
-                    <WebPageImage src="/images/GambitAndTheAnchored/GaA-img2.png" alt="Gambit And The Anchored Screenshot 2" size={600} />
+                    <WebPageImage src="/images/GambitandtheAnchored/GaA-img1.png" alt="Gambit And The Anchored Screenshot 1" size={600} />
+                    <WebPageImage src="/images/GambitandtheAnchored/GaA-img2.png" alt="Gambit And The Anchored Screenshot 2" size={600} />
                 </div>
             </div>
         </PageLoader>

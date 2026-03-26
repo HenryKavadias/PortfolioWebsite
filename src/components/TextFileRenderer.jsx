@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 const get_text_file = async (filepath) => {
   // In Vite, files in public/ are served from the root
   // No need for process.env.PUBLIC_URL
-  const res = await fetch(`/${filepath}`);
+  const res = await fetch(`${import.meta.env.BASE_URL}${filepath}`);
 
   // check for errors
   if (!res.ok) {

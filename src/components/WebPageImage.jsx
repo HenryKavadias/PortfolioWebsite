@@ -46,9 +46,11 @@ function WebPageImage({ src, alt, size = 800, padding = 10, trackLoading = true,
         ? { width: `${size}px`, height: `${size}px`, padding: `${padding}px` }
         : { maxWidth: `${size}px`, height: 'auto', padding: `${padding}px` };
 
+    const resolvedSrc = src?.startsWith('/') ? `${import.meta.env.BASE_URL}${src.slice(1)}` : src;
+
     return (
         <img 
-            src={src} 
+            src={resolvedSrc} 
             alt={alt} 
             className="web-link-image"
             style={imageStyle}

@@ -12,7 +12,7 @@ let xmlIdCounter = 0;
  */
 async function fetchXMLFile(filepath) {
   try {
-    const response = await fetch(`/${filepath}.xml`);
+    const response = await fetch(`${import.meta.env.BASE_URL}${filepath}.xml`);
     
     if (!response.ok) {
       throw new Error(`Failed to fetch ${filepath}.xml: ${response.status} ${response.statusText}`);

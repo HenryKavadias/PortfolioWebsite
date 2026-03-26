@@ -47,7 +47,7 @@ function WebPageLinks() {
                     <WebLink link="/dodgeWest" text="Dodge West" img="/images/DodgeWest/DodgeWestIcon.png" />
                     <WebLink link="/friendInMe" text="Friend In Me" img="/images/FriendInMe/FriendInMeIcon.png" />
                     <WebLink link="/eggEscape" text="Egg Escape" img="/images/EggEscape/WhelpDragon.png" />
-                    <WebLink link="/gambitAndTheAnchored" text="Gambit and the Anchored" img="/images/GambitAndTheAnchored/GambitAndAnchoredIcon.png" />
+                    <WebLink link="/gambitAndTheAnchored" text="Gambit and the Anchored" img="/images/GambitandtheAnchored/GambitAndAnchoredIcon.png" />
                 </div>
             </div>
         </div>
