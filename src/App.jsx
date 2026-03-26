@@ -11,6 +11,7 @@ function App() {
       <NavBar />
       <main className='main-content'>
         <Routes>
+          <Route path="/PortfolioWebsite/" element={<Home />} />
           <Route path="/" element={<Home />} />
           <Route path="/purger" element={<Purger />} />
           <Route path="/dodgewest" element={<DodgeWest />} />
