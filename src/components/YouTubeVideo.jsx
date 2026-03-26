@@ -177,7 +177,6 @@ function YouTubeVideo({
         onError={handleIframeError}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen={true}
-        frameBorder="0"
       />
     </div>
   );

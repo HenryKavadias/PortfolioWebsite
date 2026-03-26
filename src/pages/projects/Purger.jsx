@@ -2,6 +2,7 @@ import XMLFileRenderer from "../../components/XMLFileRenderer";
 import WebPageImage from "../../components/WebPageImage";
 import PageLoader from "../../components/PageLoader";
 import YouTubeVideo from "../../components/YouTubeVideo";
+import WebLink from "../../components/WebLink";
 import '../../css/ProjectPage.css';
 
 /*
@@ -19,28 +20,26 @@ function Purger() {
             <div className="project-page">
                 <div className="project-title"><XMLFileRenderer fileName="content/Purger/P_Title" /></div>
                 <div className="project-hero">
-                    
-                    <div className="ContentBlock-B">
-                    <YouTubeVideo 
-                        url="https://www.youtube.com/watch?v=HKYCYPcqDZA" 
-                        title="Purger Gameplay Demo"
-                        width={800}
-                        height={450}
-                    />
+                    <div className="VideoBlock">
+                        <YouTubeVideo 
+                            url="https://www.youtube.com/watch?v=HKYCYPcqDZA" 
+                            title="Purger Gameplay Demo"
+                            width={800}
+                            height={450}
+                        />
                     </div>
-                    <div className="ContentBlock-A">
-                    
-                    <XMLFileRenderer fileName="content/Purger/P_Content" />
+                    <div className="TextBlock-A">
+                        <XMLFileRenderer fileName="content/Purger/P_Content" />
+                        <div className="ExternalLinks">
+                            <WebLink link="https://fiddury.itch.io/purger" text="Prototype Demo" />
+                        </div>
                     </div>
                 </div>
-                <div className="ExternalLinks">
-                    <XMLFileRenderer fileName="content/Purger/P_Links" />
-                </div>
-                <div className="ContentBlock-C">
-                <WebPageImage src="/images/Purger/PurgerScreenshot1.png" alt="Purger Screenshot 1" size={400} />
-                <WebPageImage src="/images/Purger/PurgerScreenshot2.png" alt="Purger Screenshot 2" size={400} />
-                <WebPageImage src="/images/Purger/PurgerScreenshot3.png" alt="Purger Screenshot 3" size={400} />
-                <WebPageImage src="/images/Purger/PurgerScreenshot4.png" alt="Purger Screenshot 4" size={400} />
+                <div className="ImageBlock-A">
+                <WebPageImage src="/images/Purger/PurgerScreenshot1.png" alt="Purger Screenshot 1" size={320} />
+                <WebPageImage src="/images/Purger/PurgerScreenshot2.png" alt="Purger Screenshot 2" size={320} />
+                <WebPageImage src="/images/Purger/PurgerScreenshot3.png" alt="Purger Screenshot 3" size={320} />
+                <WebPageImage src="/images/Purger/PurgerScreenshot4.png" alt="Purger Screenshot 4" size={320} />
                 </div>
             </div>
         </PageLoader>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import WebPageImage from './WebPageImage';
+import '../css/WebLink.css';
 
 function validateProps(link, text, img) {
     if (!link || link === '') {

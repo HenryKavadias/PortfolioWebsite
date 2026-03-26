@@ -23,6 +23,13 @@
   font-weight: bold;
   color: #fff;
   text-decoration: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.navbar-container .nav-title:hover {
+  background-color: rgba(147, 51, 234, 0.3);
 }
 
 .navbar-container ul {
