@@ -6,7 +6,7 @@ import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Router basename={'/PortfolioWebsite/'}>
+    <Router>
       <App />
     </Router>
   </StrictMode>
