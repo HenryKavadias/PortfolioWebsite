@@ -1,0 +1,54 @@
+/* Shared layout styles for project showcase pages */
+
+.project-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.project-hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.project-title {
+  text-align: center;
+}
+
+.ContentBlock-B {
+  flex: 0 0 auto;
+  max-width: 560px;
+  width: 100%;
+}
+
+.ContentBlock-A {
+  flex: 1 1 0;
+  min-width: 280px;
+  text-align: left;
+}
+
+.ExternalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ContentBlock-C {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .project-hero {
+    flex-direction: column;
+  }
+}
