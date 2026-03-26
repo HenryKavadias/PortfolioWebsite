@@ -1,0 +1,93 @@
+/* Shared layout styles for project showcase pages */
+
+.project-page {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.project-hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.project-title {
+  text-align: center;
+}
+
+.VideoBlock {
+  flex: 0 0 auto;
+  max-width: 700px;
+  width: 100%;
+}
+
+.ImageBlock-A {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.ImageBlock-B {
+  flex: 0 0 auto;
+  max-width: 700px;
+  width: 100%;
+  justify-content: center;
+  padding: 6rem 0rem 0rem 0rem;
+}
+
+.TextBlock-A {
+  flex: 1 1 0;
+  max-width: 700px;
+  min-width: 280px;
+  text-align: left;
+}
+
+.TextBlock-B {
+  flex: 1 1 0;
+  max-width: 700px;
+  min-width: 280px;
+  text-align: left;
+}
+
+
+.project-subsection {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.Subtitle {
+  text-align: center;
+
+}
+
+.Subcontent {
+  max-width: 800px;
+}
+
+.ExternalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+@media (max-width: 768px) {
+  .project-hero {
+    flex-direction: column;
+  }
+
+  .project-subsection {
+    flex-direction: column;
+  }
+}

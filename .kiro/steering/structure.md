@@ -1,56 +1,59 @@
 # Project Structure
 
-## Root Directory
-```
-henryportfoliowebsite/
-├── .git/                 # Git repository
-├── .kiro/               # Kiro AI assistant configuration
-├── .vscode/             # VS Code settings
-├── public/              # Static assets served directly
-├── src/                 # Source code
-├── dist/                # Build output (generated)
-├── node_modules/        # Dependencies (generated)
-└── config files         # Various configuration files
-```
+## Directory Organization
 
-## Source Code Organization (`src/`)
 ```
 src/
-├── main.jsx            # Application entry point
-├── App.jsx             # Main App component
-├── assets/             # React/component assets
-│   └── react.svg
-└── css/                # Stylesheets
-    ├── App.css         # App component styles
-    └── index.css       # Global styles
+├── components/       # Reusable React components
+├── contexts/         # React context providers (currently empty)
+├── css/             # Stylesheets organized by component/page
+├── pages/           # Route-level page components
+│   └── projects/    # Individual project showcase pages
+└── main.jsx         # Application entry point
+
+public/
+├── images/          # Static images organized by project
+│   ├── DodgeWest/
+│   ├── EggEscape/
+│   ├── FriendInMe/
+│   ├── GambitandtheAnchored/
+│   └── Purger/
+└── text/            # Text content files organized by project
+    ├── DodgeWest/
+    ├── EggEscape/
+    ├── FriendInMe/
+    ├── GambitAnchored/
+    ├── HomePage/
+    └── Purger/
 ```
 
-## Key Conventions
+## File Naming Conventions
+- Components: PascalCase (e.g., `NavBar.jsx`, `TextFileRenderer.jsx`)
+- Pages: PascalCase (e.g., `Home.jsx`, `Purger.jsx`)
+- CSS files: Match component names (e.g., `NavBar.css` for `NavBar.jsx`)
+- Text content: Project-specific prefixes with descriptive names (e.g., `DW_Content.txt`, `P_Title.txt`)
 
-### File Naming
-- React components: PascalCase (e.g., `App.jsx`)
-- Entry files: lowercase (e.g., `main.jsx`)
-- CSS files: lowercase with component name (e.g., `App.css`)
-- Assets: lowercase with descriptive names
+## Architecture Patterns
 
-### Import Patterns
-- CSS imports in component files: `import './css/ComponentName.css'`
-- Asset imports: `import logo from './assets/logo.svg'`
-- Component imports: `import ComponentName from './ComponentName.jsx'`
-- Absolute imports for public assets: `import '/vite.svg'`
+### Routing
+- React Router DOM handles all navigation
+- Routes defined in `App.jsx`
+- Main route structure:
+  - `/` - Home page
+  - `/[projectname]` - Individual project pages (lowercase)
 
 ### Component Structure
 - Functional components with hooks
-- Default exports for main components
-- StrictMode wrapper in main.jsx for development checks
+- CSS imports at component level
+- Components export as default
 
-### Styling Approach
-- Separate CSS files for each major component
+### Content Management
+- Static text content stored in `public/text/` as `.txt` files
+- Images stored in `public/images/` organized by project
+- `TextFileRenderer` component fetches and displays text files dynamically
+- Content organized by project folders for easy maintenance
+
+### Styling
+- CSS files co-located with components in `src/css/`
 - Global styles in `index.css`
-- Component-specific styles in dedicated CSS files
-- CSS classes follow kebab-case naming
-
-### Static Assets
-- Public assets (favicon, etc.) in `public/` - served at root
-- Component assets in `src/assets/` - processed by Vite
-- SVG files for logos and icons
+- Component-specific styles imported directly in components

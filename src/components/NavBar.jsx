@@ -1,16 +1,30 @@
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import '../css/NavBar.css';
 
 function NavBar() {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const NavBarNew = (<div className="navbar-container">
+                <Link to="/" className="nav-title">Home</Link>
+                <div className="nav-menu" onClick={() => {
+                    setMenuOpen(!menuOpen);
+                }}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul className={menuOpen ? "open" : ""}>
+                    <li><NavLink to="/purger">Purger</NavLink></li>
+                    <li><NavLink to="/dodgeWest">Dodge West</NavLink></li>
+                    <li><NavLink to="/friendinme">Friend In Me</NavLink></li>
+                    <li><NavLink to="/eggescape">Egg Escape</NavLink></li>
+                    <li><NavLink to="/gambitandtheanchored">Gambit And The Anchored</NavLink></li>
+                </ul>
+            </div>);
+    
     return (
         <nav className='navbar'>
-            <ul>
-                <li><Link to="/" className="nav-link">Home</Link></li>
-                <li><Link to="/purger" className="nav-link">Projects</Link></li>
-                <li><Link to="/dodgeWest" className="nav-link">Dodge West</Link></li>
-                <li><Link to="/friendinme" className="nav-link">Friend In Me</Link></li>
-                <li><Link to="/eggescape" className="nav-link">Egg Escape</Link></li>
-                <li><Link to="/gambitandtheanchored" className="nav-link">Gambit And The Anchored</Link></li>
-            </ul>
+            {NavBarNew}
         </nav>
     );
 }

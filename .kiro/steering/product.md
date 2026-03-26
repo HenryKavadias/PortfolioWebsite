@@ -1,21 +1,14 @@
 # Product Overview
 
-This is Henry's portfolio website - a personal portfolio site built with modern web technologies to showcase projects, skills, and professional experience.
+This is a personal portfolio website showcasing game development projects by Henry Kavadias-Barnes.
 
-## Purpose
-- Display personal projects and work
-- Provide professional contact information
-- Demonstrate technical skills through the site itself
-- Serve as a digital resume/portfolio
+The site features:
+- A home page with bio and contact information
+- Individual project showcase pages for multiple games:
+  - Purger
+  - Dodge West
+  - Friend In Me
+  - Egg Escape
+  - Gambit And The Anchored
 
-## Target Audience
-- Potential employers
-- Clients
-- Professional network contacts
-- Anyone interested in Henry's work and capabilities
-
-## Key Characteristics
-- Clean, professional design
-- Fast loading and responsive
-- Modern web standards
-- Easy to maintain and update
+Each project page displays screenshots, descriptions, and details about major contributions. Content is loaded from text files stored in the public directory, allowing easy updates without code changes.
