@@ -30,6 +30,7 @@
   justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
+  width: 100%;
 }
 
 .ImageBlock-B {
@@ -54,6 +55,10 @@
   text-align: left;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
 
 .project-subsection {
   display: flex;
@@ -89,5 +94,20 @@
 
   .project-subsection {
     flex-direction: column;
+  }
+
+  .ImageBlock-B {
+    padding: 1rem 0 0 0;
+    max-width: 100%;
+  }
+
+  .VideoBlock {
+    max-width: 100%;
+  }
+
+  .TextBlock-A,
+  .TextBlock-B {
+    min-width: unset;
+    max-width: 100%;
   }
 }

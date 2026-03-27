@@ -3,7 +3,7 @@ import { LoadingTrackerContext } from '../contexts/LoadingTrackerContext';
 
 let imageIdCounter = 0;
 
-function WebPageImage({ src, alt, size = 800, padding = 10, trackLoading = true, fixedSize = false }) {
+function WebPageImage({ src, alt, size = 800, padding = 10, trackLoading = true, fixedSize = false, isLink = false }) {
     const context = useContext(LoadingTrackerContext);
     // Use module-level counter to generate unique IDs without calling impure functions during render
     const resourceId = useRef(null);
@@ -43,8 +43,8 @@ function WebPageImage({ src, alt, size = 800, padding = 10, trackLoading = true,
     };
 
     const imageStyle = fixedSize 
-        ? { width: `${size}px`, height: `${size}px`, padding: `${padding}px` }
-        : { maxWidth: `${size}px`, height: 'auto', padding: `${padding}px` };
+        ? { width: `${size}px`, height: `${size}px`, maxWidth: '100%', objectFit: 'contain', padding: `${padding}px` }
+        : { maxWidth: `${size}px`, width: '100%', height: 'auto', padding: `${padding}px` };
 
     const resolvedSrc = src?.startsWith('/') ? `${import.meta.env.BASE_URL}${src.slice(1)}` : src;
 
@@ -52,7 +52,7 @@ function WebPageImage({ src, alt, size = 800, padding = 10, trackLoading = true,
         <img 
             src={resolvedSrc} 
             alt={alt} 
-            className="web-link-image"
+            className={isLink ? "web-link-image" : "web-image"}
             style={imageStyle}
             onLoad={handleLoad}
             onError={handleError}

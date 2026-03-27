@@ -33,6 +33,7 @@ function renderContent(text, img, imageSize, fontSize, trackLoading) {
                     padding={0}
                     trackLoading={trackLoading}
                     fixedSize={true}
+                    isLink={true}
                 />
                 <span style={{ fontSize: `${fontSize}px`, marginTop: '8px' }}>{text}</span>
             </div>
@@ -49,6 +50,7 @@ function renderContent(text, img, imageSize, fontSize, trackLoading) {
                 padding={0}
                 trackLoading={trackLoading}
                 fixedSize={true}
+                isLink={true}
             />
         );
     }
