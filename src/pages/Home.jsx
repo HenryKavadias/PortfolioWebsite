@@ -57,10 +57,11 @@ function WebPageLinks() {
 
 function Home() {    
     
-    const homeContent = <div>
-            <XMLFileRenderer fileName="content/Home/HP-Title" />
+    const homeContent = 
+        <div>
+            <div className="HomePage-Title"><XMLFileRenderer fileName="content/Home/HP-Title" /></div>
             <EmailAndExternalSiteLinks />
-            <XMLFileRenderer fileName="content/Home/AboutMe" />
+            <div className="HomePage-Text"><XMLFileRenderer fileName="content/Home/AboutMe" /></div>
             <WebPageLinks />
         </div>;
     
